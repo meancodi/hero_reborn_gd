@@ -14,8 +14,8 @@ TagManager:
   - Water
   - UI
   - groundLayer
-  - 
-  - 
+  - enemyLayer
+  - playerLayer
   - 
   - 
   - 
@@ -42,6 +42,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2189434139
+    locked: 0
+  - name: FakeGround
+    uniqueID: 4018931789
     locked: 0
   m_RenderingLayers:
   - Default
