@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 7710182469919297434}
   - component: {fileID: 8843158716550162296}
-  - component: {fileID: 226412134292387907}
   - component: {fileID: 5111653589341025946}
   - component: {fileID: 8612269762728793323}
   - component: {fileID: 7678754447905464530}
+  - component: {fileID: 226412134292387907}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0869b1e96aac6d34cb086976dc7af826, type: 3}
+  m_Sprite: {fileID: -2346302928887187388, guid: 9446d835810dd624bb24a891c48d3b98, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,20 +91,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &226412134292387907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3471228119673315769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12416d7a4bd4fca4dbdd88b0181ac9d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 30
-  Maxlifetime: 10
 --- !u!50 &5111653589341025946
 Rigidbody2D:
   serializedVersion: 5
@@ -184,7 +170,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -192,7 +178,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.2, y: 0.66}
+    oldSize: {x: 1.52, y: 0.27}
     newSize: {x: 1.2, y: 0.66}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -200,3 +186,17 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.2, y: 0.66}
   m_EdgeRadius: 0
+--- !u!114 &226412134292387907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3471228119673315769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12416d7a4bd4fca4dbdd88b0181ac9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 30
+  Maxlifetime: 0.3

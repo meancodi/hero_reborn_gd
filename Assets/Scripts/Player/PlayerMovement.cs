@@ -17,9 +17,13 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D body;
     private Animator anim;
     private BoxCollider2D boxcollider;
+    public bool isAttacking = false;
+
 
     private void Awake()
     {
+
+
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         boxcollider = GetComponent<BoxCollider2D>();
@@ -28,6 +32,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+
+
+
+        if (isAttacking)
+        {
+            body.linearVelocity = new Vector2(0, body.linearVelocity.y);
+            anim.SetBool("run", false);
+            return;
+        }
+
         float horizontalInputAir = Input.GetAxis("Horizontal"); 
         float horizontalInputGround = Input.GetAxisRaw("Horizontal");
 
@@ -76,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
     {
     }
 
-    private bool isGrounded()
+    public bool isGrounded()
     {
         RaycastHit2D raycastHit = Physics2D.BoxCast(boxcollider.bounds.center, boxcollider.bounds.size,0,Vector2.down,0.1f, groundLayer);
         return raycastHit.collider != null;

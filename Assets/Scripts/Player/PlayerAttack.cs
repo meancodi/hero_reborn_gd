@@ -10,42 +10,61 @@ public class PlayerAttack : MonoBehaviour
     private PlayerMovement playerMovement;
     private float cooldownTimer = Mathf.Infinity;
 
+    private Rigidbody2D rb;
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && cooldownTimer > attackCooldown && playerMovement.canAttack()) {
+        cooldownTimer += Time.deltaTime;
+
+        // grounded + not attacking + cooldown complete
+        if (Input.GetMouseButtonDown(0) &&
+            cooldownTimer >= attackCooldown &&
+            playerMovement.canAttack() &&
+            playerMovement.isGrounded())
+        {
             Attack();
         }
-
-        cooldownTimer += Time.deltaTime;
     }
 
     private void Attack()
     {
         anim.SetTrigger("attack");
-        cooldownTimer = 0;
+        cooldownTimer = 0f;
 
-        bullets[FindBullet()].transform.position = firePoint.position;
+        // Stop movement during attack
+        playerMovement.isAttacking = true;
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
-        bullets[FindBullet()].GetComponent<BulletScript>().SetDirection(Mathf.Sign(transform.localScale.x));
+        int index = FindBullet();
+        GameObject bullet = bullets[index];
 
+        // Set position BEFORE activation 
+        bullet.transform.position = firePoint.position;
+
+        // Activate bullet THEN set direction
+        bullet.SetActive(true);
+        bullet.GetComponent<BulletScript>().SetDirection(Mathf.Sign(transform.localScale.x));
     }
 
     private int FindBullet()
     {
-        for(int i =0;i<10;i++)
-        {
+        for (int i = 0; i < bullets.Length; i++)
             if (!bullets[i].activeInHierarchy)
-            {
                 return i;
-            }
-        }
-        return 0;
+
+        return 0; // fallback
     }
 
+    // called by animation event
+    public void EndAttack()
+    {
+        playerMovement.isAttacking = false;
+    }
 }
