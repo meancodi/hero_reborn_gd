@@ -16,6 +16,11 @@ public class DroneVision : MonoBehaviour
     [SerializeField] private MeshRenderer coneRenderer;
     private Material coneMat;
 
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioClip droneDetect;
+    private bool detectSoundPlayed = false;
+
+
 
     [SerializeField] private float detectTime = 1.5f;
 
@@ -44,6 +49,12 @@ public class DroneVision : MonoBehaviour
 
         if (playerVisible)
         {
+            if (!detectSoundPlayed)
+            {
+                sfxSource.PlayOneShot(droneDetect);
+                detectSoundPlayed = true;
+            }
+
             float t = detectTimer / detectTime;
             coneMat.SetFloat("_AlertAmount", t);
 
@@ -51,16 +62,16 @@ public class DroneVision : MonoBehaviour
 
             if (detectTimer >= detectTime)
             {
-                print("Detected!");
-               
                 GameManager.instance.PlayerDefeated();
             }
         }
         else
         {
             detectTimer = 0f;
+            detectSoundPlayed = false; // ✅ RESET
             coneMat.SetFloat("_AlertAmount", 0f);
         }
+
     }
 
     private bool CheckConeDetection()

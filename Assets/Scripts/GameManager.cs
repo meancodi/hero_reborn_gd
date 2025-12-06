@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     {
         if (timerRunning)
             runTimer += Time.unscaledDeltaTime;
+
     }
 
 
@@ -43,6 +44,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f; // unfreeze
         gameOver = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void BacktoMainMenu()
+    {
+        Debug.Log("Restart pressed! Unfreezing.");
+        Time.timeScale = 1f; // unfreeze
+        gameOver = true;
+        SceneManager.LoadScene(0);
     }
 
     public void LevelClear()

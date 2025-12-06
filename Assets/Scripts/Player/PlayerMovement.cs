@@ -9,7 +9,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float airControlMultiplier = 0.7f;
     [SerializeField] private int maxJumps = 2;
-    [SerializeField] private float realScale = 1;
+    [SerializeField] private float realScale = 1; 
+    
+    [SerializeField] private AudioSource footstepSource;
+    [SerializeField] private AudioClip walkStepSound;
+
+    private AudioSource audioSource;
+
 
     private int jumpCount = 0;
 
@@ -27,6 +33,11 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         boxcollider = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
+        footstepSource.clip = walkStepSound;
+        footstepSource.loop = true;
+
+
         transform.localScale = new Vector3(realScale, realScale, realScale);
     }
 
@@ -52,9 +63,20 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("run", horizontalInputGround != 0);
             body.linearVelocity = new Vector2(horizontalInputGround * moveSpeed, body.linearVelocity.y);
             jumpCount = 0;
+            if (horizontalInputGround != 0)
+            {
+                if (!footstepSource.isPlaying)
+                    footstepSource.Play(); //  START footsteps
+            }
+            else
+            {
+                footstepSource.Stop(); // STOP footsteps
+            }
+
         }
         else // in air
         {
+
             anim.SetBool("run", horizontalInputAir != 0);
             body.linearVelocity = new Vector2(horizontalInputAir * moveSpeed * airControlMultiplier, body.linearVelocity.y);
         }

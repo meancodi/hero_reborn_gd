@@ -74,6 +74,9 @@ public class EnemyHealth : MonoBehaviour
     private SpriteRenderer sr;
     private Animator anim;
 
+    public System.Action onDeath;
+
+
     private void Awake()
     {
         currentHealth = startingHealth;
@@ -111,6 +114,9 @@ public class EnemyHealth : MonoBehaviour
     {
         DisableEnemyLogic();
 
+        // ✅ NOTIFY WAVE MANAGER
+        onDeath?.Invoke();
+
         for (int i = 0; i < deathBlinkCount; i++)
         {
             sr.color = Color.red;
@@ -121,6 +127,7 @@ public class EnemyHealth : MonoBehaviour
 
         Destroy(gameObject);
     }
+
 
     private void SetAlpha(float a)
     {

@@ -72,6 +72,7 @@ public class GroundEnemyPatrol : MonoBehaviour
     private Animator anim;
     private GroundEnemyVisionBox vision;
 
+
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -129,5 +130,14 @@ public class GroundEnemyPatrol : MonoBehaviour
                 : pointA.position;
         }
     }
+
+    public void SetPatrolPoints(Transform a, Transform b)
+    {
+        pointA = a;
+        pointB = b;
+        target = pointB.position;
+    }
+
+
 }
 

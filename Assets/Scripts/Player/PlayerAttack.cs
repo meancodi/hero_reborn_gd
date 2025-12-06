@@ -5,6 +5,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackCooldown;
     [SerializeField] private Transform firePoint;
     [SerializeField] private GameObject[] bullets;
+    [SerializeField] private AudioClip fireSound;
+    private AudioSource audioSource;
+
 
     private Animator anim;
     private PlayerMovement playerMovement;
@@ -17,6 +20,8 @@ public class PlayerAttack : MonoBehaviour
         anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     private void Update()
@@ -37,6 +42,9 @@ public class PlayerAttack : MonoBehaviour
     {
         anim.SetTrigger("attack");
         cooldownTimer = 0f;
+
+
+        audioSource.PlayOneShot(fireSound);
 
         // Stop movement during attack
         playerMovement.isAttacking = true;
