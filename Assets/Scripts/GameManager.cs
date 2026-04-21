@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
         if (timerRunning)
             runTimer += Time.unscaledDeltaTime;
 
+        // Exit to main menu on Esc
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            BacktoMainMenu();
+        }
     }
 
 

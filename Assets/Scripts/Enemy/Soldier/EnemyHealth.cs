@@ -1,94 +1,43 @@
-﻿//using UnityEngine;
-
-//public class EnemyHealth : MonoBehaviour
-//{
-//    [SerializeField] private float startingHealth = 3f;
-
-//    private float currentHealth;
-//    private Animator anim;
-//    private bool dead = false;
-
-//    [SerializeField]private float invultime = 0.05f;
-
-//    private float timeCounter = 0f;
-
-//    private void Awake()
-//    {
-//        timeCounter = 0f;
-//        currentHealth = startingHealth;
-//        anim = GetComponent<Animator>();
-//    }
-
-//    private void Update()
-//    {
-//        if(timeCounter < invultime + 1.0f)
-//            timeCounter += Time.deltaTime;
-//    }
-
-//    public void TakeDamage(float damage)
-//    {
-//        if (dead) return;
-
-//        if (timeCounter < invultime) return;
-
-//        currentHealth = Mathf.Clamp(currentHealth - damage, 0, startingHealth);
-//        timeCounter = 0f;
-
-//        if (currentHealth > 0)
-//        {
-//            //anim.SetTrigger("hurt");
-//            print("Took Damage");
-//        }
-//        else
-//        {
-//            dead = true;
-//            //anim.SetTrigger("die");
-//            print("Dead!");
-//            OnDeath();
-//        }
-//    }
-
-//    private void OnDeath()
-//    {
-//        // disable enemy AI, movement, attack
-//        GetComponent<MonoBehaviour>().enabled = false;
-
-//        // optionally destroy after animation finishes
-//        Destroy(gameObject, 0.5f);
-//    }
-//}
-
 using UnityEngine;
 using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private float startingHealth = 3f;
-    [SerializeField] private float hurtFlashDuration = 0.15f;
-    [SerializeField] private int deathBlinkCount = 4;
-    [SerializeField] private float deathBlinkInterval = 0.1f;
-
+    [SerializeField] private float startingHealth = 5f;
+    [SerializeField] private float hurtFlashDuration = 0.1f;
+    
     private float currentHealth;
     private bool dead = false;
-
     private SpriteRenderer sr;
     private Animator anim;
+    private Renderer meshRenderer;
 
     public System.Action onDeath;
-
 
     private void Awake()
     {
         currentHealth = startingHealth;
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        meshRenderer = GetComponentInChildren<Renderer>();
     }
+
+    public void SetStartingHealth(float h)
+    {
+        startingHealth = h;
+        currentHealth = h;
+    }
+
+    public float GetCurrentHealth() => currentHealth;
+    public float GetStartingHealth() => startingHealth;
+
 
     public void TakeDamage(float damage)
     {
         if (dead) return;
 
         currentHealth -= damage;
+        Debug.Log($"[EnemyHealth] {gameObject.name} took {damage} damage. HP: {currentHealth}");
 
         if (currentHealth > 0)
         {
@@ -101,48 +50,68 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    // 🟡 Hurt = transparent flash
     private IEnumerator HurtEffect()
     {
-        SetAlpha(0.4f);
+        SetVisualAlpha(0.4f);
         yield return new WaitForSeconds(hurtFlashDuration);
-        SetAlpha(1f);
+        SetVisualAlpha(1f);
     }
 
-    // 🔴 Death = red blinking
     private IEnumerator DeathEffect()
     {
         DisableEnemyLogic();
-
-        // ✅ NOTIFY WAVE MANAGER
         onDeath?.Invoke();
 
-        for (int i = 0; i < deathBlinkCount; i++)
+        // 3 Fast blinks then GONE
+        for (int i = 0; i < 3; i++)
         {
-            sr.color = Color.red;
-            yield return new WaitForSeconds(deathBlinkInterval);
-            sr.color = Color.white;
-            yield return new WaitForSeconds(deathBlinkInterval);
+            SetVisualColor(Color.red);
+            yield return new WaitForSeconds(0.05f);
+            SetVisualColor(Color.white);
+            yield return new WaitForSeconds(0.05f);
         }
 
+        gameObject.SetActive(false);
         Destroy(gameObject);
     }
 
-
-    private void SetAlpha(float a)
+    private void SetVisualAlpha(float alpha)
     {
-        Color c = sr.color;
-        c.a = a;
-        sr.color = c;
+        if (sr != null)
+        {
+            Color c = sr.color;
+            c.a = alpha;
+            sr.color = c;
+        }
+        if (meshRenderer != null)
+        {
+            Color c = meshRenderer.material.color;
+            c.a = alpha;
+            meshRenderer.material.color = c;
+        }
+    }
+
+    private void SetVisualColor(Color color)
+    {
+        if (sr != null) sr.color = color;
+        if (meshRenderer != null) meshRenderer.material.color = color;
     }
 
     private void DisableEnemyLogic()
     {
-        // Disable all enemy behaviour scripts here
-        foreach (MonoBehaviour m in GetComponents<MonoBehaviour>())
-        {
-            if (m != this)
-                m.enabled = false;
-        }
+        var patrol = GetComponent<GroundEnemyPatrol>();
+        if (patrol != null) patrol.enabled = false;
+        
+        var attack = GetComponent<GroundEnemyAttack>();
+        if (attack != null) attack.enabled = false;
+
+        var rectBoss = GetComponent<RectangleFollow>();
+        if (rectBoss != null) rectBoss.enabled = false;
+
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb != null) rb.linearVelocity = Vector2.zero;
+
+        var col = GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
     }
 }

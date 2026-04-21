@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
@@ -12,6 +12,9 @@ public class BulletScript : MonoBehaviour
 
     private BoxCollider2D box_collider;
     private Animator anim;
+
+    private Vector2 velocity;
+    private bool useVelocity = false;
 
     private void Awake()
     {
@@ -34,8 +37,15 @@ public class BulletScript : MonoBehaviour
     {
         if (hit) return;
 
-        float movementSpeed = speed * direction * Time.deltaTime;
-        transform.Translate(Vector3.right * movementSpeed, Space.World);
+        if (useVelocity)
+        {
+            transform.Translate(velocity * Time.deltaTime, Space.World);
+        }
+        else
+        {
+            float movementSpeed = speed * direction * Time.deltaTime;
+            transform.Translate(Vector3.right * movementSpeed, Space.World);
+        }
 
         lifetime += Time.deltaTime;
         if (lifetime >= Maxlifetime)
@@ -81,6 +91,7 @@ public class BulletScript : MonoBehaviour
     public void SetDirection(float _direction)
     {
         direction = Mathf.Sign(_direction);
+        useVelocity = false;
 
         // Always reset collider
         if (box_collider != null)
@@ -94,9 +105,25 @@ public class BulletScript : MonoBehaviour
         transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
     }
 
+    public void SetVelocity(Vector2 _velocity)
+    {
+        velocity = _velocity;
+        useVelocity = true;
+        
+        if (box_collider != null)
+            box_collider.enabled = true;
+
+        // Face the direction of travel
+        float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        // Visual scaling
+        float scaleX = Mathf.Abs(transform.localScale.x);
+        transform.localScale = new Vector3(scaleX, transform.localScale.y, transform.localScale.z);
+    }
+
     private void Deactivate()
     {
-        // Disable instantly (object pool safe)
         gameObject.SetActive(false);
     }
 
@@ -108,6 +135,4 @@ public class BulletScript : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-
-
 }
