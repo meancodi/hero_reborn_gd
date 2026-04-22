@@ -5,9 +5,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public bool gameOver = false;
+    public bool isPaused = false;
 
+    [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject defeatScreen;
     [SerializeField] private GameObject successScreen;
+    [SerializeField] private AudioSource currentBGM;
+    [SerializeField] private UnityEngine.UI.Slider volumeSlider;
 
     public float runTimer = 0f;
     private bool timerRunning = true;
@@ -22,13 +26,39 @@ public class GameManager : MonoBehaviour
 
         defeatScreen.SetActive(false);
         successScreen.SetActive(false);
+        pauseMenu.SetActive(false);
     }
 
     private void Update()
     {
         if (timerRunning)
-            runTimer += Time.unscaledDeltaTime;
+            runTimer += Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
+
+    }
+
+    public void RegisterBGM(AudioSource bgm)
+    {
+        currentBGM = bgm;
+
+        // Apply saved volume immediately
+        float v = PlayerPrefs.GetFloat("musicVolume", 1f);
+        currentBGM.volume = v;
+
+        if (volumeSlider != null)
+            volumeSlider.value = v;
+    }
+
+    public void SetVolume(float value)
+    {
+        if (currentBGM != null)
+            currentBGM.volume = value;
+
+        PlayerPrefs.SetFloat("musicVolume", value);
     }
 
 
@@ -67,5 +97,22 @@ public class GameManager : MonoBehaviour
         SpeedrunTimerUI.instance.ShowFinalTime(runTimer);
     }
 
+    public void TogglePause()
+    {
+        if (gameOver) return; // prevent pause after win/lose
+
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1f;
+        }
+    }
 
 }
