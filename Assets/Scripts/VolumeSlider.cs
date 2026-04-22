@@ -5,35 +5,31 @@ public class VolumeSlider : MonoBehaviour
 {
     [SerializeField] Slider volumeSlider;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        if (PlayerPrefs.HasKey("musicVolume"))
+        if (!PlayerPrefs.HasKey("musicVolume"))
         {
-            PlayerPrefs.SetFloat("musicVolume", 1);
-            Load();
+            PlayerPrefs.SetFloat("musicVolume", 1f);
         }
-        else
-        {
-            Load();
-        }
+
+        Load();
     }
 
-    public void ChangeVolume()
+    public void ChangeVolume(float value)
     {
-        AudioListener.volume = volumeSlider.value;
+        Debug.Log("Changed to " + value);
+        AudioListener.volume = value;
     }
 
     private void Load()
     {
-        volumeSlider.value = PlayerPrefs.GetFloat("musicVolume");
+        float v = PlayerPrefs.GetFloat("musicVolume");
+        volumeSlider.value = v;
+        AudioListener.volume = v;
     }
 
     private void Save()
     {
         PlayerPrefs.SetFloat("musicVolume", volumeSlider.value);
     }
-
-    // Update is called once per frame
-
 }
