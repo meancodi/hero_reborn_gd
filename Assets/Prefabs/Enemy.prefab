@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 4059984113199280672}
   - component: {fileID: 2921796764215015032}
   - component: {fileID: 4254688103528738042}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3426127e147818e4ab1767ca38e19ca6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootCooldown: 1.2
+  shootCooldown: 1.5
   bulletPrefab: {fileID: 0}
   firePoint: {fileID: 9155526622579362579}
 --- !u!114 &2916535096075325082
@@ -285,7 +285,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3910122938277869776}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EyePoint
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -317,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9152796570646907636}
   - component: {fileID: 4268875462273847949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -403,7 +403,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9155526622579362579}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}

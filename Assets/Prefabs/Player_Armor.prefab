@@ -210,6 +210,8 @@ MonoBehaviour:
   airControlMultiplier: 0.7
   maxJumps: 1
   realScale: 1
+  footstepSource: {fileID: 0}
+  walkStepSound: {fileID: 0}
   isAttacking: 0
 --- !u!114 &9198014403309839594
 MonoBehaviour:
@@ -223,9 +225,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36dfdb83898f2b8489ede017e31e06a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldown: 0.2
+  attackCooldown: 1.5
   firePoint: {fileID: 3439628909247723437}
   bullets: []
+  fireSound: {fileID: 0}
 --- !u!114 &2579852855112360311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +244,9 @@ MonoBehaviour:
   startingHealth: 0
   iFrameDuration: 1
   flashInterval: 0.1
+  sfxSource: {fileID: 0}
+  hurtSound: {fileID: 0}
+  dieVoice: {fileID: 0}
 --- !u!82 &5580968111291121480
 AudioSource:
   m_ObjectHideFlags: 0
