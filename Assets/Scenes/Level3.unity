@@ -1168,6 +1168,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: followPlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: bossScale
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: speed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2977,6 +2989,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: followPlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: bossScale
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: speed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3528,6 +3552,18 @@ PrefabInstance:
     - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: followPlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: bossScale
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4059984113199280672, guid: 0e5f0d419425c3947810d1d25a3521b2, type: 3}
+      propertyPath: speed
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

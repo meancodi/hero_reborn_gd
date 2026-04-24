@@ -39,6 +39,9 @@ public class PlayerMovement : MonoBehaviour
 
 
         transform.localScale = new Vector3(realScale, realScale, realScale);
+
+        // Increase jump speed by 10% to surpass boss
+        jumpSpeed *= 1.1f;
     }
 
     private void Update()
