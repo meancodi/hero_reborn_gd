@@ -55,6 +55,17 @@ public class BulletScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (hasHit) return;
+
+        // Ignore collisions with the shooter
+        if (CompareTag("PlayerBullet") && collision.CompareTag("Player")) return;
+        if (CompareTag("EnemyBullet") && collision.CompareTag("Enemy")) return;
+
+        // Ignore collisions with other bullets
+        if (collision.CompareTag("PlayerBullet") || collision.CompareTag("EnemyBullet")) return;
+
+        // Ignore generic triggers (like vision cones, detection zones) unless they are valid targets
+        if (collision.isTrigger && !collision.CompareTag("Enemy") && !collision.CompareTag("Player")) return;
+
         hasHit = true;
 
         // ------------ PLAYER BULLET → damages ENEMY ------------

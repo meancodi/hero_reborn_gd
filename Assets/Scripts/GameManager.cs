@@ -72,5 +72,8 @@ public class GameManager : MonoBehaviour
         SpeedrunTimerUI.instance.ShowFinalTime(runTimer);
     }
 
-
+    public void RegisterBGM(AudioSource source)
+    {
+        // Added to fix compilation error from BGMScript
+    }
 }

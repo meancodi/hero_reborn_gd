@@ -18,7 +18,7 @@ public class RectangleFollow : MonoBehaviour
     private Transform player;
     private Rigidbody2D rb;
     private float shootTimer;
-    private Renderer visualRenderer;
+    private SpriteRenderer visualRenderer;
     
     private bool isJumping = false;
     private bool nextAttackIsJump = false;
@@ -28,6 +28,8 @@ public class RectangleFollow : MonoBehaviour
     
     private GameObject hbBgObj;
     private GameObject hbPivotObj;
+
+    private Animator animator;
 
     private void Awake()
     {
@@ -95,14 +97,38 @@ public class RectangleFollow : MonoBehaviour
             fillRend.material.color = Color.red; // Red for boss health
         }
 
-        // Visual setup
-        GameObject visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        // Visual setup (Replaced Cube with SpriteRenderer + Animator)
+        GameObject visual = new GameObject("Visual");
         visual.transform.SetParent(transform);
         visual.transform.localPosition = Vector3.zero;
-        visual.transform.localScale = rectangleScale;
-        Destroy(visual.GetComponent<Collider>());
-        visualRenderer = visual.GetComponent<Renderer>();
-        visualRenderer.material.color = Color.red;
+        visual.transform.localScale = Vector3.one;
+        
+        visualRenderer = visual.AddComponent<SpriteRenderer>();
+        visualRenderer.color = Color.white;
+        visualRenderer.sortingOrder = 5;
+        
+        // Ensure a default sprite is loaded so it's never invisible
+        Sprite[] walkSprites = Resources.LoadAll<Sprite>("Boss/boss_walk_1");
+        if (walkSprites != null && walkSprites.Length > 0)
+        {
+            visualRenderer.sprite = walkSprites[0];
+        }
+        else
+        {
+            Debug.LogError("[RectangleFollow] Failed to load boss_walk_1 sprite from Resources/Boss!");
+        }
+        
+        animator = visual.AddComponent<Animator>();
+        RuntimeAnimatorController animCtrl = Resources.Load<RuntimeAnimatorController>("Boss/Boss");
+        if (animCtrl != null)
+        {
+            animator.runtimeAnimatorController = animCtrl;
+            animator.Play("boss_walk");
+        }
+        else
+        {
+            Debug.LogError("[RectangleFollow] Failed to load AnimatorController Boss/Boss!");
+        }
     }
 
     private void Update()
@@ -138,14 +164,14 @@ public class RectangleFollow : MonoBehaviour
         // 2. Shooting / Attacking
         shootTimer += Time.fixedDeltaTime;
 
-        // Warning color (Red becomes slightly darker or stays red)
+        // Warning color
         if (shootTimer >= (SHOOT_COOLDOWN - WARNING_TIME))
         {
-            if (visualRenderer != null) visualRenderer.material.color = new Color(0.5f, 0, 0); // Dark Red warning
+            if (visualRenderer != null) visualRenderer.color = new Color(1f, 0.5f, 0.5f); // Reddish warning tint
         }
         else
         {
-            if (visualRenderer != null) visualRenderer.material.color = Color.red;
+            if (visualRenderer != null) visualRenderer.color = Color.white;
         }
 
         if (shootTimer >= SHOOT_COOLDOWN)
@@ -157,7 +183,7 @@ public class RectangleFollow : MonoBehaviour
             }
             else
             {
-                ShootShotgun();
+                StartCoroutine(ShootSequence());
             }
             nextAttackIsJump = !nextAttackIsJump;
         }
@@ -166,6 +192,7 @@ public class RectangleFollow : MonoBehaviour
     private IEnumerator JumpAttackSequence()
     {
         isJumping = true;
+        if (animator != null) animator.Play("boss_jump");
         rb.linearVelocity = Vector2.zero;
         
         Vector3 targetPos = player.position;
@@ -179,7 +206,7 @@ public class RectangleFollow : MonoBehaviour
         Renderer dzRenderer = dangerZone.GetComponent<Renderer>();
         // Use a standard transparent 2D sprite shader to ensure the alpha transparency works cleanly
         dzRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        dzRenderer.material.color = new Color(1f, 0f, 0f, 0.4f); // Transparent red warning
+        dzRenderer.material.color = new Color(1f, 0f, 0f, 0.15f); // Transparent red warning
         
         // Wait 0.8 seconds (Warning Phase)
         yield return new WaitForSeconds(0.8f);
@@ -222,7 +249,21 @@ public class RectangleFollow : MonoBehaviour
 
         // Resume normal state
         isJumping = false;
-        if (visualRenderer != null) visualRenderer.material.color = Color.red;
+        if (animator != null) animator.Play("boss_walk");
+        if (visualRenderer != null) visualRenderer.color = Color.white;
+    }
+
+    private IEnumerator ShootSequence()
+    {
+        if (animator != null) animator.Play("boss_shoot");
+        
+        yield return new WaitForSeconds(0.2f);
+        
+        ShootShotgun();
+        
+        yield return new WaitForSeconds(0.5f);
+        
+        if (animator != null && !isJumping) animator.Play("boss_walk");
     }
 
     private void ShootShotgun()
